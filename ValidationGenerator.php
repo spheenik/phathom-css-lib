@@ -81,7 +81,17 @@ class ValidationGenerator {
 	}
 	
 	public static function generate($wanted_subsets, $dirOut) {
-		$c = new StringContext(file_get_contents(dirname(__FILE__)."/css_2.1.spec"));
+		$spec = file_get_contents(dirname(__FILE__)."/css_2.1.spec");
+		$dirOut = $dirOut."/".md5($spec);
+		if (is_dir($dirOut)) {
+			// already there
+			return $dirOut;
+		}
+		
+		mkdir($dirOut);
+		require_once(dirname(__FILE__)."/ValidationTree.php");
+		
+		$c = new StringContext($spec);
 		$c->setTracingEnabled(false);
 		$result = CSSSpecParser::run("S", $c);
 		$c->dumpLog();
@@ -141,15 +151,8 @@ class ValidationGenerator {
 			
 			$nameOut = $dirOut."/".str_replace(".template", "", $t);
 			file_put_contents($nameOut, "<?php\n".$output."\n?>\n");
-			
 		}
-		
-		$ip = get_include_path();
-		set_include_path($ip.PATH_SEPARATOR.$dirOut);
-		
-		set_include_path($ip);
-		
-		
+		return $dirOut;		
 	}
 	
 }

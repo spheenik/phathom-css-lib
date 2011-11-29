@@ -25,7 +25,7 @@
 if (CSSComputer::$initialized == false) {
     CSSComputer::$initialized = true;
     CSSComputer::$defaults = array(
-        CSS::_LINE_HEIGHT => new CSSNumber(110.0, CSSNumber::PERCENT),
+        CSS::_LINE_HEIGHT => new CSSNumber(110.0, "percent"),
     );
 }
 
@@ -89,10 +89,12 @@ class CSSComputer {
     private static function funcCmyk() {
         $result = array("cmyk");
         foreach(func_get_args() as $num) {
-            if ($num->unit == CSSNumber::NONE)
-                $result[] = max(0.0, min(255.0, $num->value))/255.0;
-            else
-                $result[] = max(0.0, min(100.0, $num->value))/100.0;
+        	if (!$num instanceof CSSOperator) {
+	            if ($num->unit == CSSNumber::NONE)
+	                $result[] = max(0.0, min(255.0, $num->value))/255.0;
+	            else
+	                $result[] = max(0.0, min(100.0, $num->value))/100.0;
+        	}
         }
         //var_dump($result);
         return $result;
@@ -101,10 +103,12 @@ class CSSComputer {
     private static function funcRgb() {
         $result = array("rgb");
         foreach(func_get_args() as $num) {
-            if ($num->unit == CSSNumber::NONE)
-                $result[] = max(0.0, min(255.0, $num->value))/255.0;
-            else
-                $result[] = max(0.0, min(100.0, $num->value))/100.0;
+        	if (!$num instanceof CSSOperator) {
+	        	if ($num->unit == CSSNumber::NONE)
+	                $result[] = max(0.0, min(255.0, $num->value))/255.0;
+	            else
+	                $result[] = max(0.0, min(100.0, $num->value))/100.0;
+        	}
         }
         $result[] = 0.0;
         //var_dump($result);
@@ -112,7 +116,7 @@ class CSSComputer {
     }
 
     private static function preLineHeight($me, $parent, $spec) {
-        if ($spec instanceof CSSIdent) {
+    	if ($spec instanceof CSSIdent) {
             if ($spec->tokenType == CSS::_NORMAL)
                 return self::$defaults[CSS::_LINE_HEIGHT];
         } else if ($spec instanceof CSSNumber) {
@@ -172,7 +176,7 @@ class CSSComputer {
 
             /* IDENT */
 
-            if ($spec->tokenType == CSS::_PRIM_UNKNOWN_IDENT)
+            if ($spec->tokenType == CSS::_PRIM_ANY_IDENT)
                 return $spec->value;
             else if ($spec->tokenType == CSS::_INHERIT)
                 return isset($parent[$prop]) ? $parent[$prop] : null;
@@ -182,7 +186,7 @@ class CSSComputer {
         } else if ($spec instanceof CSSNumber) {
 
             /* NUMBER */
-
+        	 
             switch($spec->unit) {
                 case CSSNumber::NONE:
                 case CSSNumber::UNKNOWN:

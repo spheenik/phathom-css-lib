@@ -1,3 +1,5 @@
+class CSSTree {
+}
 
 class CSSNode {
 	public function matchIdent($ident) {
@@ -199,6 +201,7 @@ class CSSDeclaration extends CSSNode {
 	public $property;
 	public $expression;
 	public $priority;
+	public $resolved;
 
 	public $isValid;
 
@@ -220,7 +223,7 @@ class CSSDeclaration extends CSSNode {
 	}
 
 	public function __sleep() {
-		return array("property", "expression", "priority");
+		return array("property", "expression", "resolved", "priority");
 	}
 }
 

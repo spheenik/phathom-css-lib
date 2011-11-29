@@ -27,7 +27,8 @@ class CSSParser extends Phathom {
     public static function SRule() {
     	return self::sequence(
     		self::optionalSpace(),
-    		self::zeroOrMore(self::stmt()), 
+    		function (StringContext $c) { $c->push(new CSSArray()); }, 
+    		self::zeroOrMore(self::stmt(), function (StringContext $c) { $c->peek(1)->values[] = $c->pop(); }), 
     		self::EOI
     	);
     }
@@ -52,7 +53,8 @@ class CSSParser extends Phathom {
     			$selectors = $c->pop(); 
     			$rule = new CSSRuleSet($selectors, $declarations);
     			//var_dump($rule);
-    			$rule->dump();  
+    			//$rule->dump();
+    			$c->push($rule);  
     		}
     	);
     }
