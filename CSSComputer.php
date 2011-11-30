@@ -121,7 +121,7 @@ class CSSComputer {
                 return self::$defaults[CSS::_LINE_HEIGHT];
         } else if ($spec instanceof CSSNumber) {
             if ($spec->unit == CSSNumber::NONE) {
-                return new CSSNumber($spec->value*100.0, CSSNumber::PERCENT);
+                return new CSSNumber($spec->value*100.0, "percent");
             }
         }
         return $spec;

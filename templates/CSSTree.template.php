@@ -5,6 +5,15 @@ class CSSNode {
 	public function matchIdent($ident) {
 		return false;
 	}
+	
+    public function toString() {
+        ob_start();
+        $args = func_get_args();
+        call_user_func_array(array($this, "dump"), $args);
+        $ret = ob_get_contents();
+        ob_end_clean();
+        return strip_tags($ret);
+    }
 
 };
 

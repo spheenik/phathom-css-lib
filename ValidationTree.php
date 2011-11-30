@@ -154,9 +154,7 @@ class CVOperator extends CVBase {
 }
 
 class CVNumber {
-	const NONE = 0;
-	const PERCENT = 1;
-	
+
 	public $value;
 	public $unit;
 	
@@ -166,7 +164,7 @@ class CVNumber {
 	}
 	
 	public function initialConstructor() {
-		return "new CSSNumber((double)".$this->value.", CSSNumber::".$this->unit.")";
+		return "new CSSNumber((double)".$this->value.", \"".$this->unit."\")";
 	}	
 }
 

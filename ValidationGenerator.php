@@ -92,9 +92,9 @@ class ValidationGenerator {
 		require_once(dirname(__FILE__)."/ValidationTree.php");
 		
 		$c = new StringContext($spec);
-		$c->setTracingEnabled(false);
+		//$c->setTracingEnabled(false);
 		$result = CSSSpecParser::run("S", $c);
-		$c->dumpLog();
+		//$c->dumpLog();
 		if  ($result === false) die("failed to parse spec.");
 		
 		$rules = $c->pop();

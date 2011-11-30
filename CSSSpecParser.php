@@ -193,13 +193,13 @@ class CSSSpecParser extends Phathom {
 	
 	public static function numberRule() {
 		return self::sequence(
-			self::regex("/\d+/"), function(StringContext $c) { $c->push(new CVNumber((double)$c->currentMatch(), "NONE")); }
+			self::regex("/\d+/"), function(StringContext $c) { $c->push(new CVNumber((double)$c->currentMatch(), "")); }
 		);
 	}
 
 	public static function percentageRule() {
 		return self::sequence(
-			self::regex("/\d+%/"), function(StringContext $c) { $c->push(new CVNumber((double)$c->currentMatch(), "PERCENT")); }
+			self::regex("/\d+%/"), function(StringContext $c) { $c->push(new CVNumber((double)$c->currentMatch(), "percent")); }
 		);
 	}
 	
