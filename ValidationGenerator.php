@@ -81,15 +81,19 @@ class ValidationGenerator {
 	}
 	
 	public static function generate($wanted_subsets, $dirOut) {
-		$spec = file_get_contents(dirname(__FILE__)."/css_2.1.spec");
-		$dirOut = $dirOut."/".md5($spec);
+		$spec = file_get_contents(dirname(__FILE__).DIRECTORY_SEPARATOR."css_2.1.spec");
+		$dirOut = $dirOut.DIRECTORY_SEPARATOR.md5($spec);
 		if (is_dir($dirOut)) {
 			// already there
 			return $dirOut;
 		}
 		
-		mkdir($dirOut);
-		require_once(dirname(__FILE__)."/ValidationTree.php");
+		@mkdir($dirOut, 0777, true);
+		if (!is_writable($dirOut)) {
+			die("could not create directory '$dirOut'");
+		}
+		
+		require_once(dirname(__FILE__).DIRECTORY_SEPARATOR."ValidationTree.php");
 		
 		$c = new StringContext($spec);
 		//$c->setTracingEnabled(false);
@@ -139,7 +143,7 @@ class ValidationGenerator {
 		//var_dump(self::$inheriteds);
 		//var_dump(self::$idents);
 
-		$dirIn = dirname(__FILE__)."/templates";
+		$dirIn = dirname(__FILE__).DIRECTORY_SEPARATOR."templates";
 		$templates = scandir($dirIn);
 		foreach($templates as $t) {
 			//var_dump($t);
@@ -149,7 +153,7 @@ class ValidationGenerator {
 			$output = ob_get_contents();
 			ob_end_clean();
 			
-			$nameOut = $dirOut."/".str_replace(".template", "", $t);
+			$nameOut = $dirOut.DIRECTORY_SEPARATOR.str_replace(".template", "", $t);
 			file_put_contents($nameOut, "<?php\n".$output."\n?>\n");
 		}
 		return $dirOut;		
